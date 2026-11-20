@@ -72,23 +72,26 @@ private void ShowAllMovies(String[] movieNames) {
 private void CancelBooking(int seat, char[][] seats) {
     boolean end = true;
     do {
-        int row = seat / 10;
-        int colum = seat % 10;
-        if (row >= seats.length || colum >= seats[0].length) {
-            System.out.println("Invalid seats");
-            System.out.print("Please enter seat again: ");
-            seat=in.nextInt();
-        } else {
-            if (seats[row-1][colum-1] == 'o') {
-                System.out.println("Seat is avilable arredy");
+        if (seat < 10 || seat > 99) {
+            System.out.println("Invalid seat number");
+            seat = in.nextInt();
+            int row = seat / 10;
+            int colum = seat % 10;
+            if (row >= seats.length || colum >= seats[0].length) {
+                System.out.println("Invalid seats");
                 System.out.print("Please enter seat again: ");
-                seat=in.nextInt();
+                seat = in.nextInt();
             } else {
-                seats[row - 1][colum - 1] = 'o';
-                end = false;
+                if (seats[row - 1][colum - 1] == 'o') {
+                    System.out.println("Seat is avilable arredy");
+                    System.out.print("Please enter seat again: ");
+                    seat = in.nextInt();
+                } else {
+                    seats[row - 1][colum - 1] = 'o';
+                    end = false;
+                }
             }
         }
-
     } while (end);
 
 }
@@ -97,23 +100,27 @@ private void bookSeat(int target, char[][] seats) {
 
     boolean end = true;
     do {
-        int row = target / 10;
-        int colum = target % 10;
-        if (row >= seats.length || colum >= seats[0].length) {
-            System.out.println("Invalid seats");
-            System.out.print("Please enter seat again: ");
-            target=in.nextInt();
-        } else {
-            if (seats[row-1][colum-1] == 'x') {
-                System.out.println("Seat not avilable");
+        if (target < 10 || target > 99) {
+            System.out.println("Invalid seat number");
+            target = in.nextInt();
+
+            int row = target / 10;
+            int colum = target % 10;
+            if (row >= seats.length || colum >= seats[0].length) {
+                System.out.println("Invalid seats");
                 System.out.print("Please enter seat again: ");
-                target=in.nextInt();
+                target = in.nextInt();
             } else {
-                seats[row - 1][colum - 1] = 'x';
-                end = false;
+                if (seats[row - 1][colum - 1] == 'x') {
+                    System.out.println("Seat not avilable");
+                    System.out.print("Please enter seat again: ");
+                    target = in.nextInt();
+                } else {
+                    seats[row - 1][colum - 1] = 'x';
+                    end = false;
+                }
             }
         }
-
     } while (end);
 }
 
