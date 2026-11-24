@@ -1,15 +1,19 @@
 Scanner in = new Scanner(System.in);
 
 void main() {
-    char[][] seats = new char[5][6];
 
-    String [] movieNames = {"Superman", "Avatar", "Minecraft", "Inside Out", "F1"};
+    char[][] seats = initCinema();
+
+    String [] movieNames = insertMonies();
 
     fillSeats(seats);
 
 
     int option = -1;
     do {
+
+        System.out.println("=============================Welcome to Cinema Booking System===========================\n"+
+                "           ======================How can I help you?====================");
 
         showMenu();
 
@@ -47,9 +51,41 @@ void main() {
     } while (option != 0);
 }
 
+private String[] insertMonies() {
+    System.out.print("Enter number of movies: ");
+    int numberOfMovies = in.nextInt();
+    in.nextLine();
+    String[] movieNames = new String[numberOfMovies];
+
+    for (int i = 0; i < numberOfMovies; i++){
+        System.out.print("Enter movie " + (i + 1) + " name: ");
+        movieNames[i] = in.nextLine();
+    }
+    return movieNames;
+}
+
+private char[][] initCinema() {
+    System.out.println("=============================Welcome to Cinema Booking System===========================\n"+
+            "         ======================Welcome to Cinema Booking System Admin level====================");
+    int row = 0;
+    int colum = 0;
+    do {
+        System.out.print("Enter number of rows: ");
+        row = in.nextInt();
+        System.out.print("Enter number of colums: ");
+        colum = in.nextInt();
+        if (row <= 0 || colum <= 0){
+            System.out.println("Invalid dimensions. Please try again.");
+        }
+    }while (row <= 0 || colum <= 0);
+    return new char[row][colum];
+}
+
 private void showOfAvailableAndBookedSeats(char[][] seats) {
     int booked = 0;
     int available = 0;
+    int totalSeats = seats.length * seats[0].length;
+    displaySeats(seats);
     for (int i = 0; i <seats.length; i++){
         for (int j = 0; j < seats[i].length; j++){
             if (seats[i][j] == 'o'){
@@ -58,6 +94,10 @@ private void showOfAvailableAndBookedSeats(char[][] seats) {
                 booked++;
             }
         }
+    }
+    double occupancy = (double) booked / totalSeats * 100;
+    if (occupancy >= 80) {
+        System.out.println("Almost Full");
     }
     System.out.println("Booked seats is : " + booked + ", Available seats is : " + available);
 }
@@ -72,26 +112,26 @@ private void ShowAllMovies(String[] movieNames) {
 private void CancelBooking(int seat, char[][] seats) {
     boolean end = true;
     do {
-        if (seat < 10 || seat > 99) {
-            System.out.println("Invalid seat number");
-            seat = in.nextInt();
+        // Note: This approach assumes a single-digit column number (1-9).
+        // For more flexible seat numbering, row and column should be entered separately
+        // or separated by a delimiter (e.g., 1-12).
             int row = seat / 10;
             int colum = seat % 10;
-            if (row >= seats.length || colum >= seats[0].length) {
+            if (row < 1 || row > seats.length || colum < 1 || colum > seats[0].length) {
                 System.out.println("Invalid seats");
-                System.out.print("Please enter seat again: ");
-                seat = in.nextInt();
             } else {
                 if (seats[row - 1][colum - 1] == 'o') {
                     System.out.println("Seat is avilable arredy");
-                    System.out.print("Please enter seat again: ");
-                    seat = in.nextInt();
                 } else {
                     seats[row - 1][colum - 1] = 'o';
                     end = false;
                 }
+                if (end){
+                    System.out.print("Please enter seat again: ");
+                    seat = in.nextInt();
+                }
             }
-        }
+
     } while (end);
 
 }
@@ -100,27 +140,28 @@ private void bookSeat(int target, char[][] seats) {
 
     boolean end = true;
     do {
-        if (target < 10 || target > 99) {
-            System.out.println("Invalid seat number");
-            target = in.nextInt();
+        // Note: This approach assumes a single-digit column number (1-9).
+        // For more flexible seat numbering, row and column should be entered separately
+        // or separated by a delimiter (e.g., 1-12).
 
-            int row = target / 10;
+        int row = target / 10;
             int colum = target % 10;
-            if (row >= seats.length || colum >= seats[0].length) {
+
+            if (row < 1 || row > seats.length || colum < 1 || colum > seats[0].length) {
                 System.out.println("Invalid seats");
-                System.out.print("Please enter seat again: ");
-                target = in.nextInt();
             } else {
                 if (seats[row - 1][colum - 1] == 'x') {
                     System.out.println("Seat not avilable");
-                    System.out.print("Please enter seat again: ");
-                    target = in.nextInt();
                 } else {
                     seats[row - 1][colum - 1] = 'x';
                     end = false;
                 }
             }
-        }
+            if (end){
+                System.out.print("Please enter seat again: ");
+                target = in.nextInt();
+            }
+
     } while (end);
 }
 
